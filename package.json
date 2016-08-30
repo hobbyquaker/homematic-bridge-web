@@ -1,0 +1,34 @@
+{
+  "name": "hmbridge-web",
+  "version": "0.0.0",
+  "description": "Webserver plugin for homematic-bridge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sebastian Raff (https://github.com/hobbyquaker)",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "gulp-vulcanize": "^6.1.0",
+    "vulcanize": "^1.14.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hobbyquaker/homematic-bridge-web"
+  },
+  "keywords": [
+    "homematic",
+    "bridge",
+    "plugin",
+    "web",
+    "ui"
+  ],
+  "bugs": {
+    "url": "https://github.com/hobbyquaker/homematic-bridge-web/issues"
+  },
+  "homepage": "https://github.com/hobbyquaker/homematic-bridge-web"
+}

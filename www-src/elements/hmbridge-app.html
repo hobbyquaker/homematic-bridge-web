@@ -1,0 +1,55 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="./hmbridge-status.html">
+<link rel="import" href="./hmbridge-config.html">
+
+<dom-module id="hmbridge-app">
+    <style>
+        #mainContainer {
+            width: 100vh;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+
+        }
+        #menu {
+            min-width: 200px;
+        }
+        #content {
+            min-width: 600px;
+            padding: 6px;
+        }
+
+    </style>
+    <template>
+        <div id="mainContainer">
+            <div id="menu">
+                <paper-menu selected="{{menuSelected}}">
+                    <paper-item>Status</paper-item>
+                    <paper-item>Einstellungen</paper-item>
+                </paper-menu>
+            </div>
+            <div id="content">
+                <iron-pages selected="{{menuSelected}}">
+                    <div><hmbridge-status></hmbridge-status></div>
+                    <div><hmbridge-config></hmbridge-config></div>
+                </iron-pages>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'hmbridge-app',
+            properties: {
+                menuSelected: {
+                    type: Number,
+                    value: 0
+                }
+            }
+        })
+    </script>
+</dom-module>

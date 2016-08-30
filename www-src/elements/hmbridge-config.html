@@ -1,0 +1,126 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="hmbridge-config">
+    <template>
+        <style>
+            paper-card {
+                width: 100%;
+                display: block;
+                margin-bottom: 6px;
+            }
+            paper-input.medium {
+                display: inline-block;
+                width: 191px;
+            }
+            paper-input.small {
+                display: inline-block;
+                width: 160px;
+            }
+            .controls {
+                margin: 0 0 12px -5px;
+            }
+
+        </style>
+
+
+        <div class="controls">
+            <paper-button on-click="postConfig" raised>Speichern</paper-button>
+            <paper-button on-click="restart" raised>Hmbridge neu starten</paper-button>
+        </div>
+
+        <paper-card heading="Allgemein">
+            <div class="card-content">
+                <paper-dropdown-menu label="Log verbosity">
+                    <paper-listbox attr-for-selected="value" class="dropdown-content" selected="{{config.verbosity}}">
+                        <paper-item value="debug">Debug</paper-item>
+                        <paper-item value="info">Info</paper-item>
+                        <paper-item value="warn">Warn</paper-item>
+                        <paper-item value="error">Error</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </div>
+        </paper-card>
+
+        <paper-card heading="Webserver">
+            <div class="card-content">
+                <paper-input label="Listen Port" value="{{config.web.port}}"></paper-input>
+            </div>
+        </paper-card>
+
+        <paper-card heading="Homematic Schnittstelle">
+            <div class="card-content">
+                <div>
+                    <paper-dropdown-menu label="Schnittstellentyp">
+                        <paper-listbox attr-for-selected="value" class="dropdown-content" selected="{{config.hmif.type}}">
+                            <paper-item value="ccu">CCU</paper-item>
+                            <paper-item disabled value="rfd">RFD</paper-item>
+                            <paper-item disabled value="hs485d">HS485D</paper-item>
+                            <paper-item disabled value="hmip">HmIP</paper-item>
+                            <paper-item disabled value="cuxd">CUxD</paper-item>
+                            <paper-item disabled value="homegear">Homegear</paper-item>
+                            <paper-item disabled value="custom">Benutzerdefiniert</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    <paper-input error-message="Ungültige Eingabe" class="medium" label="Adresse" value="{{config.hmif.address}}"></paper-input>
+
+                </div>
+                <div>
+                    <paper-input error-message="Ungültige Eingabe" class="medium" label="Listen Address" value="{{config.hmif.listenAddress}}"></paper-input>
+                    <paper-input error-message="Ungültige Eingabe" class="small" auto-validate type="number" min="1024" max="65535" label="xmlrpc Listen Port" value="{{config.hmif.listenPort}}"></paper-input>
+                    <paper-input error-message="Ungültige Eingabe" class="small" auto-validate type="number" min="1024" max="65535" label="binrpc Listen Port" value="{{config.hmif.listenPortBin}}"></paper-input>
+                </div>
+
+            </div>
+        </paper-card>
+
+
+        <iron-ajax id="getConfig"
+                   auto
+                   url="/api/config"
+                   handle-as="json"
+                   on-response="getConfig"
+                   debounce-duration="300">
+        </iron-ajax>
+
+        <iron-ajax id="postConfig"
+                   url="/api/config"
+                   method="POST"
+                   content-type="application/json">
+        </iron-ajax>
+
+        <iron-ajax id="restart"
+                   url="/api/restart">
+        </iron-ajax>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'hmbridge-config',
+            properties: {
+                config: {
+                    type: Object
+                }
+            },
+            getConfig: function (event, req) {
+                this.config = req.response;
+            },
+            postConfig: function () {
+                this.$.postConfig.body = JSON.stringify(this.config);
+                this.$.postConfig.contentType = 'application/json';
+                this.querySelector('#postConfig').generateRequest();
+            },
+            restart: function () {
+                this.querySelector('#restart').generateRequest();
+            }
+        })
+    </script>
+
+
+</dom-module>

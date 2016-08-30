@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module id="hmbridge-status">
+    <template>
+        <style>
+            paper-card {
+                width: 100%;
+                display: block;
+            }
+            .controls {
+                margin: 0 0 12px -5px;
+            }
+        </style>
+        <div class="controls">
+            <paper-button on-click="refresh" raised>Aktualisieren</paper-button>
+        </div>
+        <paper-card>
+            <pre>{{status}}</pre>
+        </paper-card>
+        <iron-ajax id="getStatus"
+                   auto
+                   url="/api/status"
+                   handle-as="json"
+                   on-response="getStatus"
+                   debounce-duration="300">
+        </iron-ajax>
+    </template>
+    <script>
+        Polymer({
+            is: 'hmbridge-status',
+            properties: {
+                status: {
+                    type: String,
+                    notify: true
+                }
+            },
+            getStatus: function (event, req) {
+                this.status = JSON.stringify(req.response, null, '  ');
+            },
+            refresh: function () {
+                this.$.getStatus.generateRequest();
+            }
+        })
+    </script>
+
+
+</dom-module>
