@@ -30,10 +30,7 @@
         </style>
 
 
-        <div class="controls">
-            <paper-button on-click="postConfig" raised>Speichern</paper-button>
-            <paper-button on-click="restart" raised>Hmbridge neu starten</paper-button>
-        </div>
+
 
         <paper-card heading="Allgemein">
             <div class="card-content">
@@ -81,44 +78,23 @@
         </paper-card>
 
 
-        <iron-ajax id="getConfig"
-                   auto
-                   url="/api/config"
-                   handle-as="json"
-                   on-response="getConfig"
-                   debounce-duration="300">
-        </iron-ajax>
-
-        <iron-ajax id="postConfig"
-                   url="/api/config"
-                   method="POST"
-                   content-type="application/json">
-        </iron-ajax>
-
-        <iron-ajax id="restart"
-                   url="/api/restart">
-        </iron-ajax>
-
     </template>
     <script>
         Polymer({
             is: 'hmbridge-config',
             properties: {
                 config: {
-                    type: Object
+                    type: Object,
+                    notify: true
                 }
             },
-            getConfig: function (event, req) {
-                this.config = req.response;
+            observers: [
+                'configChanged(config.*)'
+            ],
+            configChanged: function () {
+                console.log('config !');
             },
-            postConfig: function () {
-                this.$.postConfig.body = JSON.stringify(this.config);
-                this.$.postConfig.contentType = 'application/json';
-                this.querySelector('#postConfig').generateRequest();
-            },
-            restart: function () {
-                this.querySelector('#restart').generateRequest();
-            }
+
         })
     </script>
 
